@@ -4,7 +4,7 @@ import { Global, css } from '@emotion/react';
 import * as Tone from 'tone';
 import { Note, Chord } from 'tonal';
 import { generateGrid } from './logic/chordGeneration';
-import type { GridParams, ChordCell, TensionLevel, AutoModeState, AutoDirection } from './logic/types';
+import type { GridParams, ChordCell, TensionLevel, AutoModeState } from './logic/types';
 import { Header } from './components/Header';
 import { EmotionalNav } from './components/EmotionalNav';
 import { ChordGrid } from './components/ChordGrid';
@@ -141,7 +141,7 @@ function App() {
   };
 
   // Stop Playing Chord (Note Off)
-  const stopChord = async (cell?: ChordCell) => {
+  const stopChord = async (_?: ChordCell) => {
     // Synth
     // We ignore cell for synth (release all)
     synth.releaseAll();

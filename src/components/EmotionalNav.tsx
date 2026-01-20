@@ -56,7 +56,7 @@ export const EmotionalNav = ({ currentRoot, onNavigate, onChordDown, onChordUp }
         { label: "Anxious / Distant", interval: "5d", color: "#FF6B6B", mood: "Tension", suffix: "" },
     ];
 
-    const handleDown = (e: React.MouseEvent | React.TouchEvent, interval: string, suffix: string) => {
+    const handleDown = (_: React.MouseEvent | React.TouchEvent, interval: string, suffix: string) => {
         // e.preventDefault(); // Optional: prevent selection
         const targetRoot = t(interval);
         const chordName = targetRoot + (suffix || "");
@@ -81,31 +81,6 @@ export const EmotionalNav = ({ currentRoot, onNavigate, onChordDown, onChordUp }
     };
 
     const handleUp = () => {
-        // We can pass a dummy cell or null because stopChord usually releases all.
-        // But types require a cell. Let's make onChordUp allow optional cell or just pass dummy.
-        // Actually onChordUp in App.tsx ignores cell for Synth but uses it (re-calc) for MIDI.
-        // For MIDI, we need the SAME notes to stop them.
-        // IF we navigated, the previous "virtual cell" is lost?
-        // App.tsx uses `playingNotesRef` (which I implemented previously!) to stop MIDI notes.
-        // So `stopChord` actually doesn't strictly need the `cell` for MIDI Note Off 
-        // IF we rely on `playingNotesRef`.
-        // Let's check `App.tsx`: 
-        // "For MIDI, we need to know WHICH notes to stop... We could calculate them again from cell, or use the stored ref?"
-        // Implementation: `if (output) { const notesWithOctaves = getVoicedNotes(cell); ... sendMidiNoteOff... }`
-        // It DOES use the cell. 
-        // BUT `startChord` also pushes to `playingNotesRef`.
-        // Wait, `stopChord` implementation in my last edit: 
-        // It RE-CALCULATES from cell. It does NOT use `playingNotesRef` for NoteOff.
-        // That is a bug/limitation if we want to support stopping stateless chords.
-        // I should fix `App.tsx` `stopChord` to use `playingNotesRef` so we don't need to reconstruct the exact cell.
-
-        // For now, I'll pass a dummy cell, but I MUST fix App.tsx to use `playingNotesRef`.
-        // Or I reconstruct the cell here. But I need to know which one was pressed.
-        // It's easier to fix App.tsx Use `playingNotesRef` for MIDI Off.
-
-        // So I will fix App.tsx first or concurrently.
-
-        // Let's pass a dummy cell for now and assume I fix App.tsx.
         const dummyCell: ChordCell = {
             id: 'dummy',
             root: 'C',
